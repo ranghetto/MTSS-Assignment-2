@@ -5,8 +5,8 @@
 
 package it.unipd.mtss.exception;
 
-public class CheaperProcessorException extends Exception{
-    public CheaperProcessorException(String message){
+public class ItemNotFoundException extends Exception{
+    public ItemNotFoundException(String message){
         super(message);
     }
 }
