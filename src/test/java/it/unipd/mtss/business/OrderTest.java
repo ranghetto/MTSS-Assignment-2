@@ -1,17 +1,17 @@
 package it.unipd.mtss.business;
 
-import it.unipd.mtss.exception.CheaperProcessorException;
+import it.unipd.mtss.exception.ItemNotFoundException;
 import it.unipd.mtss.model.EItem;
 import it.unipd.mtss.model.EItem.ItemType;
 import it.unipd.mtss.model.User;
 import org.junit.Test;
 import org.junit.Before;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class OrderTest {
     
@@ -27,7 +27,7 @@ public class OrderTest {
     //getOrderPrice
 
     @Test
-    public void MethodGetOrderPriceShouldReturnTotal() throws CheaperProcessorException {
+    public void MethodGetOrderPriceShouldReturnTotal() throws ItemNotFoundException {
         User user = new User(1, 22, "Aldo", "Giovanni");
         list= Arrays.asList(
             new EItem(ItemType.MOUSE, "a", 16.0),
@@ -39,7 +39,7 @@ public class OrderTest {
     }
 
     @Test
-    public void MethodGetOrderPriceShouldDiscountCheaperProcessor() throws CheaperProcessorException{
+    public void MethodGetOrderPriceShouldDiscountCheaperProcessor() throws ItemNotFoundException {
         User user = new User(1, 22, "Aldo", "Giovanni");
         list= Arrays.asList(
             new EItem(ItemType.PROCESSOR, "a", 30.0),
@@ -53,31 +53,102 @@ public class OrderTest {
         assertEquals(78, order.getOrderPrice(list, user), 0.001);
     }
 
+    @Test
+    public void MethodGetOrderPriceShouldGiftCheaperMouse() throws ItemNotFoundException {
+        User user = new User(1, 22, "Aldo", "Giovanni");
+        list= Arrays.asList(
+                new EItem(ItemType.MOUSE, "a", 30.0),
+                new EItem(ItemType.MOUSE, "b", 20.0),
+                new EItem(ItemType.MOUSE, "c", 10.0),
+                new EItem(ItemType.MOUSE, "d", 5.0),
+                new EItem(ItemType.PROCESSOR, "e", 5.0),
+                new EItem(ItemType.MOUSE, "f", 5.0),
+                new EItem(ItemType.MOTHERBOARD, "a", 30.0),
+                new EItem(ItemType.MOUSE, "b", 20.0),
+                new EItem(ItemType.MOUSE, "c", 10.0),
+                new EItem(ItemType.MOUSE, "d", 5.0),
+                new EItem(ItemType.MOUSE, "e", 5.0),
+                new EItem(ItemType.MOUSE, "f", 4.0),
+                new EItem(ItemType.MOUSE, "g", 5.0)
+        );
+        assertEquals(150.0, order.getOrderPrice(list, user), 0.001);
+    }
+
+    // getCheaperMouse
+    @Test(expected = ItemNotFoundException.class)
+    public void MethodFindCheaperMouseShouldReturnException()
+            throws ItemNotFoundException {
+        list= Arrays.asList(
+                new EItem(ItemType.PROCESSOR, "e", 5.0),
+                new EItem(ItemType.MOTHERBOARD, "a", 30.0)
+        );
+        order.FindCheaperMouse(list);
+    }
+
+    @Test
+    public void MethodFindCheperMouseShouldReturnLowestPrice() throws ItemNotFoundException {
+        list= Arrays.asList(
+            new EItem(ItemType.MOUSE, "a", 30.0),
+            new EItem(ItemType.MOUSE, "b", 20.0),
+            new EItem(ItemType.MOUSE, "c", 10.0),
+            new EItem(ItemType.MOUSE, "d", 5.0),
+            new EItem(ItemType.PROCESSOR, "e", 5.0),
+            new EItem(ItemType.MOUSE, "f", 20.0),
+            new EItem(ItemType.MOTHERBOARD, "a", 30.0)
+        );
+        assertEquals(5.0, order.FindCheaperMouse(list), 0.001);
+    }
+
+    // getMousesInItems
+    @Test
+    public void MethodFindMousesShouldReturnNonEmptyList(){
+        list= Arrays.asList(
+                new EItem(ItemType.MOUSE, "a", 30.0),
+                new EItem(ItemType.MOUSE, "b", 20.0),
+                new EItem(ItemType.MOUSE, "c", 10.0),
+                new EItem(ItemType.MOUSE, "d", 5.0),
+                new EItem(ItemType.PROCESSOR, "e", 5.0),
+                new EItem(ItemType.MOUSE, "f", 5.0),
+                new EItem(ItemType.MOTHERBOARD, "a", 30.0)
+        );
+        assertEquals(5, order.FindMouses(list).size());
+    }
+
+    @Test
+    public void MethodGetMousesInItemsShouldReturnEmptyList(){
+        list= Arrays.asList(
+                new EItem(ItemType.KEYBOARD, "a", 30.0),
+                new EItem(ItemType.PROCESSOR, "e", 5.0),
+                new EItem(ItemType.MOTHERBOARD, "a", 30.0)
+        );
+        assertTrue(order.FindMouses(list).isEmpty());
+    }
+
     //getNumberOfCPU
 
     @Test
-    public void MethodGetNumberOfCPUShouldReturn0IfEmpty(){
-        assertEquals(order.getNumberofCPU(list), 0);
-    } 
+    public void MethodCountItemTypeShouldReturn0IfEmpty(){
+        assertEquals(0, order.countItemType(list, ItemType.KEYBOARD));
+    }
 
     @Test
-    public void MethodGetNumberOfCPUShouldReturnCorrectValues(){
+    public void MethodCountItemTypeShouldReturnCorrectValues(){
         list= Arrays.asList(
             new EItem(ItemType.PROCESSOR, "a", 12.0),
             new EItem(ItemType.PROCESSOR, "b", 30.0), 
             new EItem(ItemType.MOTHERBOARD, "c", 12.0)
         );
-        assertEquals(2,order.getNumberofCPU(list));
+        assertEquals(2,order.countItemType(list,ItemType.PROCESSOR));
     } 
 
     @Test
-    public void MethodGetNumberOfCPUShouldReturn0IfNoProcessorInList(){
+    public void MethodCountItemTypeShouldReturn0IfNoItemInList(){
         list= Arrays.asList(
             new EItem(ItemType.MOUSE, "a", 12.0),
             new EItem(ItemType.KEYBOARD, "b", 30.0), 
             new EItem(ItemType.MOTHERBOARD, "c", 12.0)
         );
-        assertEquals(0,order.getNumberofCPU(list));
+        assertEquals(0,order.countItemType(list, ItemType.PROCESSOR));
     }
 
     // totalPrice
@@ -100,7 +171,7 @@ public class OrderTest {
     // CheaperProcessor
 
     @Test
-    public void MethodCheaperProcessorShouldReturnCheaperProcessorPrice() throws CheaperProcessorException {
+    public void MethodCheaperProcessorShouldReturnCheaperProcessorPrice() throws ItemNotFoundException {
         list= Arrays.asList(
             new EItem(ItemType.PROCESSOR, "a", 30.0),
             new EItem(ItemType.PROCESSOR, "b", 20.0),
@@ -114,7 +185,7 @@ public class OrderTest {
     }
 
     @Test
-    public void MethodCheaperProcessorShouldLaunchExceptionOnFreeProcessor() throws CheaperProcessorException {
+    public void MethodCheaperProcessorShouldLaunchExceptionOnFreeProcessor() throws ItemNotFoundException {
         list= Arrays.asList(
             new EItem(ItemType.PROCESSOR, "a", 30.0),
             new EItem(ItemType.PROCESSOR, "b", 20.0),
@@ -127,9 +198,9 @@ public class OrderTest {
         assertEquals(0, order.FindCheaperProcessor(list), 0.001); 
     }
 
-    @Test(expected = CheaperProcessorException.class)
+    @Test(expected = ItemNotFoundException.class)
     public void MethodCheaperProcessorShouldLaunchExceptionOnNoProcessor()
-            throws CheaperProcessorException {
+            throws ItemNotFoundException {
         list= Arrays.asList(
             new EItem(ItemType.KEYBOARD, "a", 30.0),
             new EItem(ItemType.MOUSE, "g", 5.0)
@@ -137,9 +208,9 @@ public class OrderTest {
         order.FindCheaperProcessor(list);
     }
 
-    @Test(expected = CheaperProcessorException.class)
+    @Test(expected = ItemNotFoundException.class)
     public void MethodCheaperProcessorShouldLaunchExceptionOnEmptyList()
-            throws CheaperProcessorException {
+            throws ItemNotFoundException {
         order.FindCheaperProcessor(list);
     }
 
