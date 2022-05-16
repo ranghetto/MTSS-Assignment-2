@@ -2,9 +2,12 @@
 // Matteo Rango 2008066
 // Antonio Oseliero 1226325
 ////////////////////////////////////////////////////////////////////
-package it.unipd.mtss;
+package it.unipd.mtss.model;
 
-public class App
-{
-    public int placeholder(){ return 0;}
+
+import java.util.List;
+
+public interface OrderInterface {
+
+    double getOrderPrice(List<EItem> itemsOrdered, User user);
 }
