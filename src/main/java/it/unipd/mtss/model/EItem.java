@@ -5,7 +5,7 @@
 package it.unipd.mtss.model;
 
 public class EItem {
-    enum ItemType {
+    public enum ItemType {
         PROCESSOR,
         MOTHERBOARD,
         MOUSE,
