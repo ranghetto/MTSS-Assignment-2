@@ -1,13 +1,10 @@
+////////////////////////////////////////////////////////////////////
+// Matteo Rango 2008066
+// Antonio Oseliero 1226325
+////////////////////////////////////////////////////////////////////
 package it.unipd.mtss;
 
-/**
- * Hello world!
- *
- */
-public class App 
+public class App
 {
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
-    }
+    public int placeholder(){ return 0;}
 }

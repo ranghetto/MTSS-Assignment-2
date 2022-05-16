@@ -1,20 +1,14 @@
 package it.unipd.mtss;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-{
-    /**
-     * Rigorous Test :-)
-     */
+public class AppTest {
     @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
+    public void placeholderTest() {
+        App a = new App();
+        assertEquals(0, a.placeholder());
     }
 }
