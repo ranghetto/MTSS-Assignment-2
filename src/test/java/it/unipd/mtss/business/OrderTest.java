@@ -53,31 +53,63 @@ public class OrderTest {
         assertEquals(78, order.getOrderPrice(list, user), 0.001);
     }
 
+    @Test
+    public void MethodGetOrderPriceShouldGiftCheaperMouse() throws CheaperProcessorException{
+        User user = new User(1, 22, "Aldo", "Giovanni");
+        list= Arrays.asList(
+                new EItem(ItemType.MOUSE, "a", 30.0),
+                new EItem(ItemType.MOUSE, "b", 20.0),
+                new EItem(ItemType.MOUSE, "c", 10.0),
+                new EItem(ItemType.MOUSE, "d", 5.0),
+                new EItem(ItemType.PROCESSOR, "e", 5.0),
+                new EItem(ItemType.MOUSE, "f", 5.0),
+                new EItem(ItemType.MOTHERBOARD, "a", 30.0),
+                new EItem(ItemType.MOUSE, "b", 20.0),
+                new EItem(ItemType.MOUSE, "c", 10.0),
+                new EItem(ItemType.MOUSE, "d", 5.0),
+                new EItem(ItemType.MOUSE, "e", 5.0),
+                new EItem(ItemType.MOUSE, "f", 4.0),
+                new EItem(ItemType.MOUSE, "g", 5.0)
+        );
+        assertEquals(150.0, order.getOrderPrice(list, user), 0.001);
+    }
+
+    // getMousesInItems
+    @Test
+    public void MethodGetMousesInItemsShouldReturnNonEmptyList(){
+
+    }
+
+    @Test
+    public void MethodGetMousesInItemsShouldReturnEmptyList(){
+
+    }
+
     //getNumberOfCPU
 
     @Test
-    public void MethodGetNumberOfCPUShouldReturn0IfEmpty(){
-        assertEquals(order.getNumberofCPU(list), 0);
-    } 
+    public void MethodCountItemTypeShouldReturn0IfEmpty(){
+        assertEquals(0, order.countItemType(list, ItemType.KEYBOARD));
+    }
 
     @Test
-    public void MethodGetNumberOfCPUShouldReturnCorrectValues(){
+    public void MethodCountItemTypeShouldReturnCorrectValues(){
         list= Arrays.asList(
             new EItem(ItemType.PROCESSOR, "a", 12.0),
             new EItem(ItemType.PROCESSOR, "b", 30.0), 
             new EItem(ItemType.MOTHERBOARD, "c", 12.0)
         );
-        assertEquals(2,order.getNumberofCPU(list));
+        assertEquals(2,order.countItemType(list,ItemType.PROCESSOR));
     } 
 
     @Test
-    public void MethodGetNumberOfCPUShouldReturn0IfNoProcessorInList(){
+    public void MethodCountItemTypeShouldReturn0IfNoItemInList(){
         list= Arrays.asList(
             new EItem(ItemType.MOUSE, "a", 12.0),
             new EItem(ItemType.KEYBOARD, "b", 30.0), 
             new EItem(ItemType.MOTHERBOARD, "c", 12.0)
         );
-        assertEquals(0,order.getNumberofCPU(list));
+        assertEquals(0,order.countItemType(list, ItemType.PROCESSOR));
     }
 
     // totalPrice

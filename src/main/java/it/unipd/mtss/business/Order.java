@@ -19,14 +19,14 @@ public class Order implements OrderInterface {
             throws CheaperProcessorException {
         double price;
         price = totalPrice(itemsOrdered);
-        if(getNumberofCPU(itemsOrdered)>5)
+        if(countItemType(itemsOrdered, ItemType.PROCESSOR)>5)
         {
             price=price-Apply50PercDiscount(FindCheaperProcessor(itemsOrdered));
         }
         return price;
     }
 
-    public double FindCheaperProcessor(List<EItem> list) 
+    public double FindCheaperProcessor(List<EItem> list)
             throws CheaperProcessorException {
         
         double cheap=0;
@@ -63,19 +63,11 @@ public class Order implements OrderInterface {
         return price;
     }
 
-    public int getNumberofCPU(List<EItem> itemsOrdered){
-        if(itemsOrdered.isEmpty())
-        {
-            return 0;
+    public int countItemType(List<EItem> items, ItemType type){
+        int count = 0;
+        for (EItem item : items) {
+            if (item.getType() == type) count++;
         }
-        else
-        {
-            int n=0;
-            for(int i=0; i<itemsOrdered.size(); i++)
-            {
-                if(itemsOrdered.get(i).getType()==ItemType.PROCESSOR) ++n;
-            }
-            return n;
-        }
+        return count;
     }
 }
