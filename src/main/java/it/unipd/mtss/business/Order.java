@@ -15,7 +15,15 @@ public class Order implements OrderInterface {
 
     @Override
     public double getOrderPrice(List<EItem> itemsOrdered, User user) {
-        return 0;
+        double price;
+        price = totalPrice(itemsOrdered);
+        return price;
+    }
+
+    public double totalPrice(List<EItem> items){
+        double price = 0;
+        for (EItem item : items) price += item.getPrice();
+        return price;
     }
 
     public int getNumberofCPU(List<EItem> itemsOrdered){

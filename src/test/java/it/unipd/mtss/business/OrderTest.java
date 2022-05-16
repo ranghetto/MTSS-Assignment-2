@@ -25,8 +25,14 @@ public class OrderTest {
     //getOrderPrice
 
     @Test
-    public void MethodGetOrderPriceShouldExists() {
+    public void MethodGetOrderPriceShouldReturnTotal() {
         User user = new User(1, 22, "Aldo", "Giovanni");
+        List<EItem> list= Arrays.asList(
+                new EItem(ItemType.MOUSE, "a", 16.0),
+                new EItem(ItemType.KEYBOARD, "b", 30.0),
+                new EItem(ItemType.MOTHERBOARD, "c", 14.0)
+        );
+        assertEquals(60.0, order.getOrderPrice(list, user), 0.001);
         order.getOrderPrice(list, user);
     }
 
@@ -55,5 +61,22 @@ public class OrderTest {
             new EItem(ItemType.MOTHERBOARD, "c", 12.0)
         );
         assertEquals(order.getNumberofCPU(list), 0);
+    }
+
+    // totalPrice
+
+    @Test
+    public void MethodTotalPriceShouldReturnCorrectValue(){
+        List<EItem> list= Arrays.asList(
+                new EItem(ItemType.MOUSE, "a", 12.0),
+                new EItem(ItemType.KEYBOARD, "b", 30.0),
+                new EItem(ItemType.MOTHERBOARD, "c", 12.0)
+        );
+        assertEquals(54.0, order.totalPrice(list), 0.001);
+    }
+
+    @Test
+    public void MethodTotalPriceShouldReturn0IfListEmpty(){
+        assertEquals(0.0, order.totalPrice(list), 0.001);
     }
 }
