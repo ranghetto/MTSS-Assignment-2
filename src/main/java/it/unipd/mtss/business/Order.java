@@ -36,10 +36,6 @@ public class Order implements OrderInterface {
         return time;
     }
 
-    public List<EItem> getListOrder(){
-        return list;
-    }
-
     @Override
     public double getOrderPrice(List<EItem> itemsOrdered, User user) 
             throws ItemNotFoundException, OrderException{
