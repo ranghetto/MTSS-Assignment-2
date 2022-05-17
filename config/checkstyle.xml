@@ -37,7 +37,7 @@
         <!-- It indicates the minimum number of text to write, 1 to 4 is a good number ^^ -->
         <!-- If the number exceeds, REFACTOR NOW, before is too late mate -->
         <module name="CyclomaticComplexity">
-            <property name="max" value="6"/>
+            <property name="max" value="7"/>
         </module>
 
         <!-- Check for maximum number of lines in a methods -->

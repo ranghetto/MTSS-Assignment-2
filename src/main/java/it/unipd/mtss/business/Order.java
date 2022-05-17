@@ -4,6 +4,7 @@
 ////////////////////////////////////////////////////////////////////
 package it.unipd.mtss.business;
 
+import java.util.Date;
 import it.unipd.mtss.exception.ItemNotFoundException;
 import it.unipd.mtss.exception.OrderException;
 import it.unipd.mtss.model.EItem;
@@ -11,10 +12,29 @@ import it.unipd.mtss.model.OrderInterface;
 import it.unipd.mtss.model.User;
 import it.unipd.mtss.model.EItem.ItemType;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Order implements OrderInterface {
+
+    private User user;
+    private Date time;
+    private List<EItem> list;
+
+    public Order(User u, Date t, List<EItem> l){
+        this.user=u;
+        this.time=t;
+        this.list=l; 
+    }
+
+    public User getUserOrder(){
+        return user;
+    }
+
+    public Date getTimeOrder(){
+        return time;
+    }
 
     @Override
     public double getOrderPrice(List<EItem> itemsOrdered, User user) 
@@ -36,7 +56,7 @@ public class Order implements OrderInterface {
             price-=CheaperMouseKeyboard(itemsOrdered);
         }
         return price;
-    }
+    } 
 
     public boolean CheckOrdinability(List<EItem> list)
             throws OrderException{
