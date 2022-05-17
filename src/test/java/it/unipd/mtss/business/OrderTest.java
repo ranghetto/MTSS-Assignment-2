@@ -1,6 +1,7 @@
 package it.unipd.mtss.business;
 
 import it.unipd.mtss.exception.ItemNotFoundException;
+import it.unipd.mtss.exception.OrderException;
 import it.unipd.mtss.model.EItem;
 import it.unipd.mtss.model.EItem.ItemType;
 import it.unipd.mtss.model.User;
@@ -27,7 +28,8 @@ public class OrderTest {
     //getOrderPrice
 
     @Test
-    public void MethodGetOrderPriceShouldReturnTotal() throws ItemNotFoundException {
+    public void MethodGetOrderPriceShouldReturnTotal() 
+            throws ItemNotFoundException, OrderException {
         User user = new User(1, 22, "Aldo", "Giovanni");
         list= Arrays.asList(
             new EItem(ItemType.MOUSE, "a", 16.0),
@@ -35,11 +37,11 @@ public class OrderTest {
             new EItem(ItemType.MOTHERBOARD, "c", 14.0)
         );
         assertEquals(60.0, order.getOrderPrice(list, user), 0.001);
-        order.getOrderPrice(list, user);
     }
 
     @Test
-    public void MethodGetOrderPriceShouldAddCommission() throws ItemNotFoundException {
+    public void MethodGetOrderPriceShouldAddCommission() 
+            throws ItemNotFoundException, OrderException {
         User user = new User(1, 22, "Aldo", "Giovanni");
         list= Collections.singletonList(
                 new EItem(ItemType.MOUSE, "g", 5.0)
@@ -48,7 +50,8 @@ public class OrderTest {
     }
 
     @Test
-    public void MethodGetOrderPriceShouldDiscountCheaperProcessor() throws ItemNotFoundException {
+    public void MethodGetOrderPriceShouldDiscountCheaperProcessor() 
+            throws ItemNotFoundException, OrderException {
         User user = new User(1, 22, "Aldo", "Giovanni");
         list= Arrays.asList(
             new EItem(ItemType.PROCESSOR, "a", 30.0),
@@ -63,7 +66,8 @@ public class OrderTest {
     }
 
     @Test
-    public void MethodGetOrderPriceShouldGiftCheaperMouse() throws ItemNotFoundException {
+    public void MethodGetOrderPriceShouldGiftCheaperMouse() 
+            throws ItemNotFoundException, OrderException {
         User user = new User(1, 22, "Aldo", "Giovanni");
         list= Arrays.asList(
                 new EItem(ItemType.MOUSE, "a", 30.0),
@@ -84,7 +88,8 @@ public class OrderTest {
     }
 
     @Test
-    public void MethodGetOrderPriceShouldDiscount10FromTotalPrice() throws ItemNotFoundException {
+    public void MethodGetOrderPriceShouldDiscount10FromTotalPrice() 
+            throws ItemNotFoundException, OrderException {
         User user = new User(1, 22, "Aldo", "Giovanni");
         list= Arrays.asList(
                 new EItem(ItemType.MOUSE, "a", 300.0),
@@ -98,7 +103,8 @@ public class OrderTest {
         assertEquals(1800.0, order.getOrderPrice(list, user), 0.001);
     }
     @Test
-    public void MethodGetOrderPriceShouldDiscount10FromTotalPriceAndGiftMouse() throws ItemNotFoundException {
+    public void MethodGetOrderPriceShouldDiscount10FromTotalPriceAndGiftMouse() 
+            throws ItemNotFoundException, OrderException {
         User user = new User(1, 22, "Aldo", "Giovanni");
         list= Arrays.asList(
                 new EItem(ItemType.MOUSE, "a", 300.0),
@@ -122,7 +128,7 @@ public class OrderTest {
 
     @Test
     public void MethodGetOrderPriceShouldDiscount10FromTotalPriceAndGiftMouseAndDiscountProcessor()
-            throws ItemNotFoundException {
+            throws ItemNotFoundException, OrderException {
         User user = new User(1, 22, "Aldo", "Giovanni");
         list= Arrays.asList(
                 new EItem(ItemType.MOUSE, "a", 300.0),
@@ -150,7 +156,7 @@ public class OrderTest {
 
     @Test
     public void MethodGetOrderPriceShouldGiftCheaperIfMouseEqualKeyboard()
-            throws ItemNotFoundException{
+            throws ItemNotFoundException, OrderException {
         User user = new User(1, 22, "Aldo", "Giovanni");
         list= Arrays.asList(
                 new EItem(ItemType.MOUSE, "a", 300.0),
@@ -164,7 +170,7 @@ public class OrderTest {
 
     @Test
     public void MethodGetOrderPriceShouldReturn0IfMouseDifKeyboard()
-            throws ItemNotFoundException{
+            throws ItemNotFoundException, OrderException {
         User user = new User(1, 22, "Aldo", "Giovanni");
         list= Arrays.asList(
                 new EItem(ItemType.MOUSE, "a", 300.0),
@@ -177,7 +183,7 @@ public class OrderTest {
 
     @Test
     public void MethodGetOrderPriceShouldGiftCheaperIfRequirementNotMet()
-            throws ItemNotFoundException{
+            throws ItemNotFoundException, OrderException {
         User user = new User(1, 22, "Aldo", "Giovanni");
         list= Arrays.asList(
                 new EItem(ItemType.PROCESSOR, "c", 300.0),
@@ -188,7 +194,7 @@ public class OrderTest {
 
     @Test
     public void MethodGetOrderPriceApplyAllDiscount()
-            throws ItemNotFoundException{
+            throws ItemNotFoundException, OrderException {
         User user = new User(1, 22, "Aldo", "Giovanni");
         list= Arrays.asList(
                 new EItem(ItemType.PROCESSOR, "p1", 300.0),
@@ -221,6 +227,46 @@ public class OrderTest {
                 new EItem(ItemType.KEYBOARD, "k11", 300.0)
         );
         assertEquals(6810, order.getOrderPrice(list, user), 0.001);
+    }
+
+    @Test(expected = OrderException.class)
+    public void MethodGetOrderPriceExceptionOnMoreThan30Items()
+            throws ItemNotFoundException, OrderException {
+        User user = new User(1, 22, "Aldo", "Giovanni");
+        list=Arrays.asList(
+            new EItem(ItemType.PROCESSOR, "p1", 300.0),
+            new EItem(ItemType.PROCESSOR, "p2", 300.0),
+            new EItem(ItemType.PROCESSOR, "p3", 300.0),
+            new EItem(ItemType.PROCESSOR, "p4", 300.0),
+            new EItem(ItemType.PROCESSOR, "p5", 300.0),
+            new EItem(ItemType.PROCESSOR, "p6", 300.0),
+            new EItem(ItemType.MOUSE, "m1", 300.0),
+            new EItem(ItemType.MOUSE, "m2", 300.0),
+            new EItem(ItemType.MOUSE, "m3", 300.0),
+            new EItem(ItemType.MOUSE, "m4", 300.0),
+            new EItem(ItemType.MOUSE, "m5", 300.0),
+            new EItem(ItemType.MOUSE, "m6", 300.0),
+            new EItem(ItemType.MOUSE, "m7", 300.0),
+            new EItem(ItemType.MOUSE, "m8", 300.0),
+            new EItem(ItemType.MOUSE, "m9", 300.0),
+            new EItem(ItemType.MOUSE, "m10", 300.0),
+            new EItem(ItemType.MOUSE, "m11", 300.0),
+            new EItem(ItemType.KEYBOARD, "k1", 300.0),
+            new EItem(ItemType.KEYBOARD, "k2", 300.0),
+            new EItem(ItemType.KEYBOARD, "k3", 300.0),
+            new EItem(ItemType.KEYBOARD, "k4", 300.0),
+            new EItem(ItemType.KEYBOARD, "k5", 300.0),
+            new EItem(ItemType.KEYBOARD, "k6", 300.0),
+            new EItem(ItemType.KEYBOARD, "k7", 300.0),
+            new EItem(ItemType.KEYBOARD, "k8", 300.0),
+            new EItem(ItemType.KEYBOARD, "k9", 300.0),
+            new EItem(ItemType.KEYBOARD, "k10", 300.0),
+            new EItem(ItemType.KEYBOARD, "k5", 300.0),
+            new EItem(ItemType.KEYBOARD, "k6", 300.0),
+            new EItem(ItemType.KEYBOARD, "k7", 300.0),
+            new EItem(ItemType.KEYBOARD, "k11", 300.0)
+        );
+        order.getOrderPrice(list, user);
     }
 
     // getCheaperMouse
@@ -417,6 +463,60 @@ public class OrderTest {
     @Test
     public void MethodCheaperMouseKeyboardReturn0IfEmptyList(){
         assertEquals(0, order.CheaperMouseKeyboard(list), 0.001);
+    }
+
+    // CheckOrdinability
+
+    @Test
+    public void MethodCheckOrdinabilityReturnTrueIfMin30()
+            throws OrderException{
+        list=Arrays.asList(
+            new EItem(ItemType.PROCESSOR, "a", 30.0),
+            new EItem(ItemType.PROCESSOR, "b", 12.0),
+            new EItem(ItemType.PROCESSOR, "c", 10.0),
+            new EItem(ItemType.PROCESSOR, "d", 6.0),
+            new EItem(ItemType.PROCESSOR, "d", 6.0)
+        );
+        assertTrue(order.CheckOrdinability(list));
+    }
+
+    @Test(expected = OrderException.class)
+    public void MethodCheckOrdinabilityReturnFalseIfMoreThan30()
+            throws OrderException{
+        list=Arrays.asList(
+            new EItem(ItemType.PROCESSOR, "p1", 300.0),
+            new EItem(ItemType.PROCESSOR, "p2", 300.0),
+            new EItem(ItemType.PROCESSOR, "p3", 300.0),
+            new EItem(ItemType.PROCESSOR, "p4", 300.0),
+            new EItem(ItemType.PROCESSOR, "p5", 300.0),
+            new EItem(ItemType.PROCESSOR, "p6", 300.0),
+            new EItem(ItemType.MOUSE, "m1", 300.0),
+            new EItem(ItemType.MOUSE, "m2", 300.0),
+            new EItem(ItemType.MOUSE, "m3", 300.0),
+            new EItem(ItemType.MOUSE, "m4", 300.0),
+            new EItem(ItemType.MOUSE, "m5", 300.0),
+            new EItem(ItemType.MOUSE, "m6", 300.0),
+            new EItem(ItemType.MOUSE, "m7", 300.0),
+            new EItem(ItemType.MOUSE, "m8", 300.0),
+            new EItem(ItemType.MOUSE, "m9", 300.0),
+            new EItem(ItemType.MOUSE, "m10", 300.0),
+            new EItem(ItemType.MOUSE, "m11", 300.0),
+            new EItem(ItemType.KEYBOARD, "k1", 300.0),
+            new EItem(ItemType.KEYBOARD, "k2", 300.0),
+            new EItem(ItemType.KEYBOARD, "k3", 300.0),
+            new EItem(ItemType.KEYBOARD, "k4", 300.0),
+            new EItem(ItemType.KEYBOARD, "k5", 300.0),
+            new EItem(ItemType.KEYBOARD, "k6", 300.0),
+            new EItem(ItemType.KEYBOARD, "k7", 300.0),
+            new EItem(ItemType.KEYBOARD, "k8", 300.0),
+            new EItem(ItemType.KEYBOARD, "k9", 300.0),
+            new EItem(ItemType.KEYBOARD, "k10", 300.0),
+            new EItem(ItemType.KEYBOARD, "k5", 300.0),
+            new EItem(ItemType.KEYBOARD, "k6", 300.0),
+            new EItem(ItemType.KEYBOARD, "k7", 300.0),
+            new EItem(ItemType.KEYBOARD, "k11", 300.0)
+        );
+        order.CheckOrdinability(list);
     }
 
 }
