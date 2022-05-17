@@ -20,12 +20,13 @@ public class Order implements OrderInterface {
             throws ItemNotFoundException {
         double price;
         price = totalPrice(itemsOrdered);
+        if(price > 1000) price -= ApplyDiscount(price, 10);
         if(countItemType(itemsOrdered, ItemType.PROCESSOR)>5) {
-            return price-Apply50PercDiscount(
-                    FindCheaperProcessor(itemsOrdered));
+            price -= ApplyDiscount(
+                    FindCheaperProcessor(itemsOrdered),50);
         }
         if(countItemType(itemsOrdered, ItemType.MOUSE)>10){
-            return price-FindCheaperMouse(itemsOrdered);
+            price -= FindCheaperMouse(itemsOrdered);
         }
         return price;
     }
@@ -57,16 +58,14 @@ public class Order implements OrderInterface {
         double cheap=0;
         boolean found=false;
 
-        for(int i=0; i<list.size(); i++)
-        {
-            if(list.get(i).getType()==ItemType.PROCESSOR)
-            {   
-                if(i==0) cheap=list.get(i).getPrice();
-                found=true;
-                if(list.get(i).getPrice()<cheap){
-                    cheap=list.get(i).getPrice();
+        for (EItem eItem : list) {
+            if (eItem.getType() == ItemType.PROCESSOR) {
+                if (!found) cheap = eItem.getPrice();
+                found = true;
+                if (eItem.getPrice() < cheap) {
+                    cheap = eItem.getPrice();
                 }
-            }  
+            }
         }
         if(!found){
             throw new ItemNotFoundException("no processor found");
@@ -74,9 +73,9 @@ public class Order implements OrderInterface {
         return cheap;
     }
 
-    public double Apply50PercDiscount(double price){
+    public double ApplyDiscount(double price, double percentage){
         if(price<=0) return 0;
-        return price/2;
+        return (percentage * price) / 100;
     }
 
     public double totalPrice(List<EItem> items){

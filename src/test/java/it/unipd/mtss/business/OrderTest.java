@@ -74,6 +74,70 @@ public class OrderTest {
         assertEquals(150.0, order.getOrderPrice(list, user), 0.001);
     }
 
+    @Test
+    public void MethodGetOrderPriceShouldDiscount10FromTotalPrice() throws ItemNotFoundException {
+        User user = new User(1, 22, "Aldo", "Giovanni");
+        list= Arrays.asList(
+                new EItem(ItemType.MOUSE, "a", 300.0),
+                new EItem(ItemType.MOUSE, "b", 50.0),
+                new EItem(ItemType.MOUSE, "c", 300.0),
+                new EItem(ItemType.MOUSE, "d", 50.0),
+                new EItem(ItemType.PROCESSOR, "e", 300.0),
+                new EItem(ItemType.MOTHERBOARD, "a", 200.0),
+                new EItem(ItemType.PROCESSOR, "b", 800.0)
+        );
+        assertEquals(1800.0, order.getOrderPrice(list, user), 0.001);
+    }
+    @Test
+    public void MethodGetOrderPriceShouldDiscount10FromTotalPriceAndGiftMouse() throws ItemNotFoundException {
+        User user = new User(1, 22, "Aldo", "Giovanni");
+        list= Arrays.asList(
+                new EItem(ItemType.MOUSE, "a", 300.0),
+                new EItem(ItemType.MOUSE, "b", 50.0),
+                new EItem(ItemType.MOUSE, "c", 300.0),
+                new EItem(ItemType.MOUSE, "d", 50.0),
+                new EItem(ItemType.MOUSE, "c", 300.0),
+                new EItem(ItemType.MOUSE, "d", 50.0),
+                new EItem(ItemType.MOUSE, "c", 300.0),
+                new EItem(ItemType.MOUSE, "d", 50.0),
+                new EItem(ItemType.MOUSE, "c", 300.0),
+                new EItem(ItemType.MOUSE, "d", 50.0),
+                new EItem(ItemType.MOUSE, "c", 300.0),
+                new EItem(ItemType.MOUSE, "d", 50.0),
+                new EItem(ItemType.PROCESSOR, "e", 300.0),
+                new EItem(ItemType.MOTHERBOARD, "a", 200.0),
+                new EItem(ItemType.PROCESSOR, "b", 800.0)
+        );
+        assertEquals(3010.0, order.getOrderPrice(list, user), 0.001);
+    }
+
+    @Test
+    public void MethodGetOrderPriceShouldDiscount10FromTotalPriceAndGiftMouseAndDiscountProcessor()
+            throws ItemNotFoundException {
+        User user = new User(1, 22, "Aldo", "Giovanni");
+        list= Arrays.asList(
+                new EItem(ItemType.MOUSE, "a", 300.0),
+                new EItem(ItemType.MOUSE, "c", 300.0),
+                new EItem(ItemType.MOUSE, "c", 300.0),
+                new EItem(ItemType.MOUSE, "c", 300.0),
+                new EItem(ItemType.MOUSE, "c", 300.0),
+                new EItem(ItemType.MOUSE, "c", 300.0),
+                new EItem(ItemType.MOUSE, "b", 50.0),
+                new EItem(ItemType.MOUSE, "d", 50.0),
+                new EItem(ItemType.MOUSE, "d", 50.0),
+                new EItem(ItemType.MOUSE, "d", 50.0),
+                new EItem(ItemType.MOUSE, "d", 50.0),
+                new EItem(ItemType.MOUSE, "d", 50.0),
+                new EItem(ItemType.MOTHERBOARD, "a", 200.0),
+                new EItem(ItemType.PROCESSOR, "b", 800.0),
+                new EItem(ItemType.PROCESSOR, "e", 600.0),
+                new EItem(ItemType.PROCESSOR, "e", 300.0),
+                new EItem(ItemType.PROCESSOR, "e", 300.0),
+                new EItem(ItemType.PROCESSOR, "e", 300.0),
+                new EItem(ItemType.PROCESSOR, "e", 300.0)
+        );
+        assertEquals(4210.0, order.getOrderPrice(list, user), 0.001);
+    }
     // getCheaperMouse
     @Test(expected = ItemNotFoundException.class)
     public void MethodFindCheaperMouseShouldReturnException()
@@ -86,7 +150,7 @@ public class OrderTest {
     }
 
     @Test
-    public void MethodFindCheperMouseShouldReturnLowestPrice() throws ItemNotFoundException {
+    public void MethodFindCheaperMouseShouldReturnLowestPrice() throws ItemNotFoundException {
         list= Arrays.asList(
             new EItem(ItemType.MOUSE, "a", 30.0),
             new EItem(ItemType.MOUSE, "b", 20.0),
@@ -214,16 +278,15 @@ public class OrderTest {
         order.FindCheaperProcessor(list);
     }
 
-    //Apply50PercDiscount
+    //ApplyDiscount
 
     @Test
-    public void MethodApply50PercDiscountShouldReturn0OnValue0(){
-        assertEquals(0.0, order.Apply50PercDiscount(0.0), 0.001);
+    public void MethodApplyDiscountShouldReturn0OnValue0(){
+        assertEquals(0.0, order.ApplyDiscount(0.0, 30), 0.001);
     }
 
     @Test
-    public void MetohdApply50PercDiscountShouldReturnCorrectValues(){
-        assertEquals(8, order.Apply50PercDiscount(16), 0.001);
+    public void MethodApplyDiscountShouldReturnHalfPrice(){
+        assertEquals(8, order.ApplyDiscount(16, 50), 0.001);
     }
-
 }
