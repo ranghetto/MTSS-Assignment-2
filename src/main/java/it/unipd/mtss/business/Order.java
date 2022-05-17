@@ -20,6 +20,7 @@ public class Order implements OrderInterface {
             throws ItemNotFoundException {
         double price;
         price = totalPrice(itemsOrdered);
+        if(price < 10) price += 2;
         if(price > 1000) price -= ApplyDiscount(price, 10);
         if(countItemType(itemsOrdered, ItemType.PROCESSOR)>5) {
             price -= ApplyDiscount(
@@ -29,8 +30,9 @@ public class Order implements OrderInterface {
             price -= FindCheaperMouse(itemsOrdered);
         }
         if(countItemType(itemsOrdered, ItemType.MOUSE)==
-            countItemType(itemsOrdered, ItemType.KEYBOARD)) 
-            {return price-=CheaperMouseKeyboard(itemsOrdered);}
+            countItemType(itemsOrdered, ItemType.KEYBOARD)) {
+            price-=CheaperMouseKeyboard(itemsOrdered);
+        }
         return price;
     }
 
@@ -79,16 +81,14 @@ public class Order implements OrderInterface {
     public double CheaperMouseKeyboard(List<EItem> list){
         double cheap=0;
         boolean first=true;
-        for(int i=0; i<list.size(); i++){
-            if(list.get(i).getType()==ItemType.KEYBOARD ||
-               list.get(i).getType()==ItemType.MOUSE)
-               {
-                   if(list.get(i).getPrice()<cheap || first)
-                   {
-                       first=false;
-                       cheap=list.get(i).getPrice();
-                   }
-               }
+        for (EItem eItem : list) {
+            if (eItem.getType() == ItemType.KEYBOARD ||
+                    eItem.getType() == ItemType.MOUSE) {
+                if (eItem.getPrice() < cheap || first) {
+                    first = false;
+                    cheap = eItem.getPrice();
+                }
+            }
         }
         return cheap;
     }
