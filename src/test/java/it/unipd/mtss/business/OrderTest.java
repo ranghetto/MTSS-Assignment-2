@@ -1,5 +1,9 @@
 package it.unipd.mtss.business;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import it.unipd.mtss.exception.ItemNotFoundException;
 import it.unipd.mtss.exception.OrderException;
 import it.unipd.mtss.model.EItem;
@@ -17,12 +21,19 @@ import static org.junit.Assert.*;
 public class OrderTest {
     
     Order order;
+    User user;
+    Date date;
     List<EItem> list;
 
     @Before
      public void GenerateEnvironment(){
-        order=new Order();
         list=Collections.emptyList();
+        user=new User(0, 20, "name", "surname");
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        try{
+            date= dateFormat.parse("18:00"); 
+        }catch(ParseException e){}
+        order=new Order(user, date, list);
     }
     
     //getOrderPrice
