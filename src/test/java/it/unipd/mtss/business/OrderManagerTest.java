@@ -27,7 +27,7 @@ public class OrderManagerTest {
         manager=new OrderManager();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         try{
-            date18= dateFormat.parse("12:00"); 
+            date12= dateFormat.parse("12:00"); 
             date18= dateFormat.parse("18:00"); 
             date20= dateFormat.parse("20:00"); 
         }catch(ParseException e){}
@@ -236,6 +236,13 @@ public class OrderManagerTest {
         list=Arrays.asList(
             new Order(
                 new User(0, 25, "name", "surname"),
+                date12,
+                itemList=Arrays.asList(
+                    new EItem(ItemType.MOUSE, "a", 16.0)
+                )  
+            ),
+            new Order(
+                new User(0, 14, "name", "surname"),
                 date12,
                 itemList=Arrays.asList(
                     new EItem(ItemType.MOUSE, "a", 16.0)
