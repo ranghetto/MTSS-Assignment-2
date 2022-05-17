@@ -39,6 +39,15 @@ public class OrderTest {
     }
 
     @Test
+    public void MethodGetOrderPriceShouldAddCommission() throws ItemNotFoundException {
+        User user = new User(1, 22, "Aldo", "Giovanni");
+        list= Collections.singletonList(
+                new EItem(ItemType.MOUSE, "g", 5.0)
+        );
+        assertEquals(7, order.getOrderPrice(list, user), 0.001);
+    }
+
+    @Test
     public void MethodGetOrderPriceShouldDiscountCheaperProcessor() throws ItemNotFoundException {
         User user = new User(1, 22, "Aldo", "Giovanni");
         list= Arrays.asList(
