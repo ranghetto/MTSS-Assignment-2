@@ -5,6 +5,7 @@
 package it.unipd.mtss.business;
 
 import it.unipd.mtss.exception.ItemNotFoundException;
+import it.unipd.mtss.exception.OrderException;
 import it.unipd.mtss.model.EItem;
 import it.unipd.mtss.model.OrderInterface;
 import it.unipd.mtss.model.User;
@@ -17,8 +18,9 @@ public class Order implements OrderInterface {
 
     @Override
     public double getOrderPrice(List<EItem> itemsOrdered, User user) 
-            throws ItemNotFoundException {
+            throws ItemNotFoundException, OrderException{
         double price;
+        CheckOrdinability(itemsOrdered);
         price = totalPrice(itemsOrdered);
         if(price < 10) price += 2;
         if(price > 1000) price -= ApplyDiscount(price, 10);
@@ -34,6 +36,18 @@ public class Order implements OrderInterface {
             price-=CheaperMouseKeyboard(itemsOrdered);
         }
         return price;
+    }
+
+    public boolean CheckOrdinability(List<EItem> list)
+            throws OrderException{
+        if(list.size()<=30)
+        {
+            return true;
+        }
+        else
+        {
+            throw new OrderException("order with more than 30 items");
+        }
     }
 
     public double FindCheaperMouse(List<EItem> items)
