@@ -28,6 +28,9 @@ public class Order implements OrderInterface {
         if(countItemType(itemsOrdered, ItemType.MOUSE)>10){
             price -= FindCheaperMouse(itemsOrdered);
         }
+        if(countItemType(itemsOrdered, ItemType.MOUSE)==
+            countItemType(itemsOrdered, ItemType.KEYBOARD)) 
+            {return price-=CheaperMouseKeyboard(itemsOrdered);}
         return price;
     }
 
@@ -69,6 +72,23 @@ public class Order implements OrderInterface {
         }
         if(!found){
             throw new ItemNotFoundException("no processor found");
+        }
+        return cheap;
+    }
+
+    public double CheaperMouseKeyboard(List<EItem> list){
+        double cheap=0;
+        boolean first=true;
+        for(int i=0; i<list.size(); i++){
+            if(list.get(i).getType()==ItemType.KEYBOARD ||
+               list.get(i).getType()==ItemType.MOUSE)
+               {
+                   if(list.get(i).getPrice()<cheap || first)
+                   {
+                       first=false;
+                       cheap=list.get(i).getPrice();
+                   }
+               }
         }
         return cheap;
     }
